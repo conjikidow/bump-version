@@ -5,8 +5,3 @@ current_version = "1.0.0"
 filename = "README.md"
 search = 'conjikidow/bump-version@v{current_version}'
 replace = 'conjikidow/bump-version@v{new_version}'
-
-[[tool.bumpversion.files]]
-filename = ".github/workflows/bump-version.yaml"
-search = 'conjikidow/bump-version@v{current_version}'
-replace = 'conjikidow/bump-version@v{new_version}'
