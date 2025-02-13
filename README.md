@@ -51,14 +51,14 @@ jobs:
 
 ### Configuration
 
-To use this action, make sure your project is configured to work with `bump-my-version`.
-Below is an example configuration file `.bumpversion.toml`:
+To use this action, ensure that your project is configured to work with `bump-my-version`.
+Below is an example `.bumpversion.toml` configuration file:
 
 ```toml
 [tool.bumpversion]
 current_version = "0.1.0"
-commit = true
-message = "Bump version: {current_version} -> {new_version}"
+commit = false
+tag = false
 
 [[tool.bumpversion.files]]
 filename = "pyproject.toml"
@@ -66,7 +66,15 @@ search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
 ```
 
-For more details, refer to the official [documentation](https://callowayproject.github.io/bump-my-version/reference/configuration).
+Note: `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
+
+To generate a default configuration file, run the following command:
+
+```console
+uvx bump-my-version sample-config --no-prompt --destination .bumpversion.toml
+```
+
+For more details, refer to the official [bump-my-version documentation](https://callowayproject.github.io/bump-my-version/reference/configuration).
 
 ## How It Works
 
