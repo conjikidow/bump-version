@@ -32,7 +32,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: conjikidow/bump-version@v1
+      - uses: conjikidow/bump-version@v1.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           labels-to-add: "automated,version-bump"
