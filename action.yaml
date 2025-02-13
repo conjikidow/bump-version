@@ -1,0 +1,80 @@
+name: "Bump Version"
+description: "Automatically bumps version based on labels and creates a pull request"
+
+inputs:
+  github-token:
+    description: "GitHub Token"
+    required: true
+  version-of-bump-my-version:
+    description: "Version of bump-my-version"
+    required: false
+    default: "latest"
+  label-major:
+    description: "Label for major update"
+    required: false
+    default: "update::major"
+  label-minor:
+    description: "Label for minor update"
+    required: false
+    default: "update::minor"
+  label-patch:
+    description: "Label for patch update"
+    required: false
+    default: "update::patch"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check if PR is merged
+      shell: bash
+      run: |
+        if [[ -z "${{ github.event.pull_request.merged }}" || "${{ github.event.pull_request.merged }}" != "true" ]]; then
+          echo "Skipping job because the pull request is not merged."
+          echo "SKIP_JOB=true" >> "$GITHUB_ENV"
+        fi
+
+    - name: Checkout repository
+      if: env.SKIP_JOB != 'true'
+      uses: actions/checkout@v4
+
+    - name: Configure Git user
+      if: env.SKIP_JOB != 'true'
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Determine bump type
+      if: env.SKIP_JOB != 'true'
+      id: bump-type
+      shell: bash
+      run: ${{ github.action_path }}/src/determine-bump-type.sh
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        REPO: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        LABEL_MAJOR: ${{ inputs.label-major }}
+        LABEL_MINOR: ${{ inputs.label-minor }}
+        LABEL_PATCH: ${{ inputs.label-patch }}
+
+    - name: Install uv
+      if: env.SKIP_JOB != 'true' && steps.bump-type.outputs.type != 'none'
+      uses: astral-sh/setup-uv@v5
+
+    - name: Run bump script
+      if: env.SKIP_JOB != 'true' && steps.bump-type.outputs.type != 'none'
+      shell: bash
+      run: ${{ github.action_path }}/src/bump-version.sh
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        VERSION_OF_BUMP_MY_VERSION: ${{ inputs.version-of-bump-my-version }}
+        BUMP_TYPE: ${{ steps.bump-type.outputs.type }}
+
+    - name: Create tag
+      if: env.SKIP_JOB != 'true'
+      shell: bash
+      run: ${{ github.action_path }}/src/create-tag.sh
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
