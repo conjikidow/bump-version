@@ -28,7 +28,7 @@ git add .
 git commit -m "Bump version: ${previous_version} -> ${current_version}"
 
 # Push the new branch to the repository
-git push origin "$new_branch"
+git push -f origin "$new_branch"
 
 # Create a pull request for the version bump
 gh pr create --title "Bump version from ${previous_version} to ${current_version}" \
