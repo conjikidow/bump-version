@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+
+  determine-changes:
+    name: Determine changed files
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.changed-files.outputs.src_any_changed }}
+      doc: ${{ steps.changed-files.outputs.doc_any_changed }}
+      test: ${{ steps.changed-files.outputs.test_any_changed }}
+      workflow: ${{ steps.changed-files.outputs.workflow_any_changed }}
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Determine changed files
+        uses: tj-actions/changed-files@v45.0.7
+        id: changed-files
+        with:
+          files_yaml: |
+            src:
+              - src/**
+            doc:
+              - '**/**.md'
+              - docs/**
+            test:
+              - tests/**
+              - '!tests/**.md'
+            workflow:
+              - .github/workflows/**
+
+  lint-gh-actions:
+    name: Lint GitHub Actions
+    needs: determine-changes
+    if: ${{ needs.determine-changes.outputs.workflow == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@v4.2.2
+
+      - uses: reviewdog/action-actionlint@v1.64.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: error
+
+  check-spelling:
+    name: Check spelling
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Check spelling
+        uses: crate-ci/typos@v1.29.5
+        with:
+          files: |
+            .
+            .github/**
