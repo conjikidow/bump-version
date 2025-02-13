@@ -1,5 +1,6 @@
-name: "Bump Version"
-description: "Automatically bumps version based on labels and creates a pull request"
+name: "Bump Version by Labels"
+description: "Automatically bumps version based on PR labels and creates a pull request and tag."
+author: "conjikidow"
 
 inputs:
   github-token:
@@ -83,3 +84,7 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         HEAD_REF: ${{ github.event.pull_request.head.ref }}
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+
+branding:
+  icon: "chevrons-up"
+  color: "green"

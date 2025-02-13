@@ -1,4 +1,4 @@
-# Bump Version Action
+# Bump Version by Labels
 
 This GitHub Action automatically bumps the project version based on PR labels and creates a pull request.
 Once the version bump PR is merged, it automatically creates a new tag for the bumped version.
