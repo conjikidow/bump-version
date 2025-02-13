@@ -35,4 +35,4 @@ gh pr create --title "Bump version from ${previous_version} to ${current_version
              --body "This PR updates the version from ${previous_version} to ${current_version}." \
              --base "$base_branch" \
              --head "$new_branch" \
-             --label "automated,versioning"
+             --label "$LABELS_TO_ADD"

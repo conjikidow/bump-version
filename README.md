@@ -35,6 +35,7 @@ jobs:
       - uses: conjikidow/bump-version@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels-to-add: "automated,version-bump"
 ```
 
 ### Inputs
@@ -46,6 +47,7 @@ jobs:
 | `label-major`                | The label used to trigger a major version bump  | No       | `"update::major"` |
 | `label-minor`                | The label used to trigger a minor version bump  | No       | `"update::minor"` |
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"` |
+| `labels-to-add`              | The labels to add to the PR for version bumping | No       | None              |
 
 ### Configuration
 

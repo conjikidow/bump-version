@@ -21,6 +21,10 @@ inputs:
     description: "Label for patch update"
     required: false
     default: "update::patch"
+  labels-to-add:
+    description: "Labels to add to the pull request"
+    required: false
+    default: None
 
 runs:
   using: "composite"
@@ -69,6 +73,7 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         VERSION_OF_BUMP_MY_VERSION: ${{ inputs.version-of-bump-my-version }}
         BUMP_TYPE: ${{ steps.bump-type.outputs.type }}
+        LABELS_TO_ADD: ${{ inputs.labels-to-add }}
 
     - name: Create tag
       if: env.SKIP_JOB != 'true'
