@@ -41,3 +41,7 @@
 - name: "dependencies"
   description: "Update dependencies"
   color: "D6D6D6"
+
+- name: "versioning"
+  description: "Versioning changes"
+  color: "D6D6D6"

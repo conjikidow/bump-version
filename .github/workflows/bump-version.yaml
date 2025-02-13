@@ -1,0 +1,19 @@
+name: "Bump Version"
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: conjikidow/bump-version@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels-to-add: "automated,versioning"
