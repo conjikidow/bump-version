@@ -41,6 +41,8 @@ runs:
     - name: Checkout repository
       if: env.SKIP_JOB != 'true'
       uses: actions/checkout@v4.2.2
+      with:
+        token: ${{ inputs.github-token }}
 
     - name: Configure Git user
       if: env.SKIP_JOB != 'true'
