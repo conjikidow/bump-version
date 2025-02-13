@@ -78,7 +78,7 @@ For more details, refer to the official [bump-my-version documentation](https://
 
 ### GitHub Actions Permissions Setup
 
-To enable GitHub Actions to run properly in your repository, you need to adjust the default permissions granted to the `GITHUB_TOKEN`. This is especially important for **private repositories**.
+To enable GitHub Actions to run properly in your repository, you need to adjust the default permissions granted to the `GITHUB_TOKEN`.
 
 Follow these steps to configure the permissions:
 
@@ -90,8 +90,6 @@ Follow these steps to configure the permissions:
 4. Save the changes.
 
 ![image](https://github.com/user-attachments/assets/da55e896-e087-486e-aadc-7fc1283dc652)
-
-These settings are **necessary only for private repositories**. For public repositories, this configuration is not required.
 
 ## How It Works
 
