@@ -5,13 +5,13 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/generate_labels.yaml'
-      - '.github/labels/label_definition.yaml'
+      - '.github/workflows/generate-labels.yaml'
+      - '.github/labels/label-definition.yaml'
   pull_request:
     types: [opened, synchronize, reopened, labeled]
     paths:
-      - '.github/workflows/generate_labels.yaml'
-      - '.github/labels/label_definition.yaml'
+      - '.github/workflows/generate-labels.yaml'
+      - '.github/labels/label-definition.yaml'
 
 jobs:
 
@@ -30,6 +30,6 @@ jobs:
         uses: crazy-max/ghaction-github-labeler@v5.2.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          yaml-file: .github/labels/label_definition.yaml
+          yaml-file: .github/labels/label-definition.yaml
           skip-delete: false
           dry-run: false
