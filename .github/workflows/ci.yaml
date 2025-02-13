@@ -15,7 +15,6 @@ jobs:
     outputs:
       src: ${{ steps.changed-files.outputs.src_any_changed }}
       doc: ${{ steps.changed-files.outputs.doc_any_changed }}
-      test: ${{ steps.changed-files.outputs.test_any_changed }}
       workflow: ${{ steps.changed-files.outputs.workflow_any_changed }}
 
     steps:
@@ -30,13 +29,10 @@ jobs:
         with:
           files_yaml: |
             src:
-              - src/**
+              - 'src/**.sh'
             doc:
               - '**/**.md'
               - docs/**
-            test:
-              - tests/**
-              - '!tests/**.md'
             workflow:
               - .github/workflows/**
 
