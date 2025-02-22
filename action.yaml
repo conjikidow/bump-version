@@ -5,7 +5,8 @@ author: "conjikidow"
 inputs:
   github-token:
     description: "GitHub Token"
-    required: true
+    required: false
+    default: ${{ github.token }}
   version-of-bump-my-version:
     description: "Version of bump-my-version"
     required: false
