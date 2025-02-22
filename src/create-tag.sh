@@ -29,16 +29,27 @@ new_minor_version=$(cut -d. -f1,2 <<< "$new_version")
 git tag "v${new_version}" "$MERGE_COMMIT_SHA"
 git push origin "v${new_version}"
 
-# Update minor tag only if the minor version changed
-if [[ "$previous_minor_version" != "$new_minor_version" ]]; then
-    echo "Updating minor tag: v${new_minor_version}"
-    git tag -f "v${new_minor_version}" "$MERGE_COMMIT_SHA"
-    git push -f origin "v${new_minor_version}"
-fi
+existing_previous_major_tag=$(git ls-remote --tags origin "v${previous_major_version}" | awk '{print $2}')
+existing_previous_minor_tag=$(git ls-remote --tags origin "v${previous_minor_version}" | awk '{print $2}')
+existing_major_tag=$(git ls-remote --tags origin "v${new_major_version}" | awk '{print $2}')
+existing_minor_tag=$(git ls-remote --tags origin "v${new_minor_version}" | awk '{print $2}')
 
-# Update major tag only if the major version changed
-if [[ "$previous_major_version" != "$new_major_version" ]]; then
+if [[ -n "$existing_major_tag" ]]; then
     echo "Updating major tag: v${new_major_version}"
     git tag -f "v${new_major_version}" "$MERGE_COMMIT_SHA"
     git push -f origin "v${new_major_version}"
+elif [[ -n "$existing_previous_major_tag" ]]; then
+    echo "Creating new major tag: v${new_major_version} (previous major v${previous_major_version} exists)"
+    git tag "v${new_major_version}" "$MERGE_COMMIT_SHA"
+    git push origin "v${new_major_version}"
+fi
+
+if [[ -n "$existing_minor_tag" ]]; then
+    echo "Updating minor tag: v${new_minor_version}"
+    git tag -f "v${new_minor_version}" "$MERGE_COMMIT_SHA"
+    git push -f origin "v${new_minor_version}"
+elif [[ -n "$existing_previous_minor_tag" ]]; then
+    echo "Creating new minor tag: v${new_minor_version} (previous minor v${previous_minor_version} exists)"
+    git tag "v${new_minor_version}" "$MERGE_COMMIT_SHA"
+    git push origin "v${new_minor_version}"
 fi
