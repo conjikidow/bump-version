@@ -15,5 +15,4 @@ jobs:
     steps:
       - uses: conjikidow/bump-version@v1.0.2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           labels-to-add: "automated,versioning"
