@@ -34,20 +34,19 @@ jobs:
     steps:
       - uses: conjikidow/bump-version@v1.0.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           labels-to-add: "automated,version-bump"
 ```
 
 ### Inputs
 
-| Name                         | Description                                     | Required | Default           |
-|------------------------------|-------------------------------------------------|:--------:|-------------------|
-| `github-token`               | The GitHub token for authentication             | Yes      | N/A               |
-| `version-of-bump-my-version` | The version of `bump-my-version` to use         | No       | `"latest"`        |
-| `label-major`                | The label used to trigger a major version bump  | No       | `"update::major"` |
-| `label-minor`                | The label used to trigger a minor version bump  | No       | `"update::minor"` |
-| `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"` |
-| `labels-to-add`              | The labels to add to the PR for version bumping | No       | None              |
+| Name                         | Description                                     | Required | Default               |
+|------------------------------|-------------------------------------------------|:--------:|-----------------------|
+| `github-token`               | The GitHub token for authentication             | No       | `${{ github.token }}` |
+| `version-of-bump-my-version` | The version of `bump-my-version` to use         | No       | `"latest"`            |
+| `label-major`                | The label used to trigger a major version bump  | No       | `"update::major"`     |
+| `label-minor`                | The label used to trigger a minor version bump  | No       | `"update::minor"`     |
+| `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"`     |
+| `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
 
 ### bump-my-version Configuration
 
