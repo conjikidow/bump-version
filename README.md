@@ -32,7 +32,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: conjikidow/bump-version@v1.1.0
+      - uses: conjikidow/bump-version@v1
         with:
           labels-to-add: "automated,version-bump"
 ```
