@@ -110,3 +110,19 @@ Follow these steps to configure the permissions:
 5. After merging, creates a Git tag
    - The branch name is parsed to extract the new version number.
    - A Git tag (`vX.Y.Z`) is pushed to mark the new release.
+
+### Tag Management
+
+In addition to the full version tag (`vX.Y.Z`), this action updates existing major (`vX`) and minor (`vX.Y`) tags based on the following rules:
+
+- If `vX.Y` exists → update to `vX.Y.Z`.
+- If `vX.Y` does not exist but a previous minor tag (`vX.Y` before the update) exists → create `vX.Y` and set it to `vX.Y.Z`.
+- If `vX` exists → update to `vX.Y.Z`.
+- If `vX` does not exist but a previous major tag (`vX` before the update) exists → create `vX` and set it to `vX.Y.Z`.
+- If neither `vX` nor `vX.Y` exist, they are not created.
+
+#### Examples
+
+- `v1.2.3 → v1.2.4`: Update `v1.2` and `v1` if they exist.
+- `v1.2.3 → v1.3.0`: Create `v1.3` if `v1.2` exists, update `v1` if it exists.
+- `v1.2.3 → v2.0.0`: Create `v2.0` if `v1.2` exists, create `v2` if `v1` exists.
