@@ -14,15 +14,21 @@ Once the version bump PR is merged, it automatically creates a new tag for the b
 
 ### Workflow Example
 
-Add the following workflow to your repository to automatically bump the version when a PR is merged. Save it as `.github/workflows/bump-version.yaml`, for example.
+Below is an example workflow you can add to your repository to automatically bump the version when a pull request is merged.
+You can save it in a file such as `.github/workflows/bump-version.yaml`.
+
+Make sure your workflow includes the following:
+
+- The `on: pull_request: types: [closed]` trigger to run the workflow whenever a pull request is closed.
+- The condition `if: github.event.pull_request.merged == true` to ensure the workflow only proceeds if the pull request was merged.
+- The permissions under `permissions:` to allow the workflow to update repository contents and pull requests.
 
 ```yaml
 name: "Bump Version"
 
 on:
   pull_request:
-    types:
-      - closed
+    types: [closed]
 
 jobs:
   bump-version:
@@ -34,6 +40,9 @@ jobs:
     steps:
       - uses: conjikidow/bump-version@v1
         with:
+          label-major: "major update"
+          label-minor: "minor update"
+          label-patch: "patch update"
           labels-to-add: "automated,version-bump"
 ```
 
@@ -47,6 +56,8 @@ jobs:
 | `label-minor`                | The label used to trigger a minor version bump  | No       | `"update::minor"`     |
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"`     |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
+
+> **Note:** Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
 
 ### bump-my-version Configuration
 
@@ -126,3 +137,8 @@ In addition to the full version tag (`vX.Y.Z`), this action updates existing maj
 - `v1.2.3 → v1.2.4`: Update `v1.2` and `v1` if they exist.
 - `v1.2.3 → v1.3.0`: Create `v1.3` if `v1.2` exists, update `v1` if it exists.
 - `v1.2.3 → v2.0.0`: Create `v2.0` if `v1.2` exists, create `v2` if `v1` exists.
+
+## Contributing & Feedback
+
+Contributions, bug reports, and feedback are always welcome!
+Thank you for helping improve this project for everyone!
