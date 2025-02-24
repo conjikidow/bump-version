@@ -57,6 +57,8 @@ jobs:
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"`     |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
 
+> **Note:** Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
+
 ### bump-my-version Configuration
 
 To use this action, ensure that your project is configured to work with `bump-my-version`.
