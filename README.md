@@ -14,15 +14,21 @@ Once the version bump PR is merged, it automatically creates a new tag for the b
 
 ### Workflow Example
 
-Add the following workflow to your repository to automatically bump the version when a PR is merged. Save it as `.github/workflows/bump-version.yaml`, for example.
+Below is an example workflow you can add to your repository to automatically bump the version when a pull request is merged.
+You can save it in a file such as `.github/workflows/bump-version.yaml`.
+
+Make sure your workflow includes the following:
+
+- The `on: pull_request: types: [closed]` trigger to run the workflow whenever a pull request is closed.
+- The condition `if: github.event.pull_request.merged == true` to ensure the workflow only proceeds if the pull request was merged.
+- The permissions under `permissions:` to allow the workflow to update repository contents and pull requests.
 
 ```yaml
 name: "Bump Version"
 
 on:
   pull_request:
-    types:
-      - closed
+    types: [closed]
 
 jobs:
   bump-version:
