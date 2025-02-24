@@ -34,6 +34,9 @@ jobs:
     steps:
       - uses: conjikidow/bump-version@v1
         with:
+          label-major: "major update"
+          label-minor: "minor update"
+          label-patch: "patch update"
           labels-to-add: "automated,version-bump"
 ```
 
