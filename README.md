@@ -137,3 +137,8 @@ In addition to the full version tag (`vX.Y.Z`), this action updates existing maj
 - `v1.2.3 → v1.2.4`: Update `v1.2` and `v1` if they exist.
 - `v1.2.3 → v1.3.0`: Create `v1.3` if `v1.2` exists, update `v1` if it exists.
 - `v1.2.3 → v2.0.0`: Create `v2.0` if `v1.2` exists, create `v2` if `v1` exists.
+
+## Contributing & Feedback
+
+Contributions, bug reports, and feedback are always welcome!
+Thank you for helping improve this project for everyone!
