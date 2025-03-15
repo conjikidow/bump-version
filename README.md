@@ -52,9 +52,9 @@ jobs:
 |------------------------------|-------------------------------------------------|:--------:|-----------------------|
 | `github-token`               | The GitHub token for authentication             | No       | `${{ github.token }}` |
 | `version-of-bump-my-version` | The version of `bump-my-version` to use         | No       | `"latest"`            |
-| `label-major`                | The label used to trigger a major version bump  | No       | `"update::major"`     |
-| `label-minor`                | The label used to trigger a minor version bump  | No       | `"update::minor"`     |
-| `label-patch`                | The label used to trigger a patch version bump  | No       | `"update::patch"`     |
+| `label-major`                | The label used to trigger a major version bump  | No       | `"major"`     |
+| `label-minor`                | The label used to trigger a minor version bump  | No       | `"minor"`     |
+| `label-patch`                | The label used to trigger a patch version bump  | No       | `"patch"`     |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
 
 > **Note:** Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
