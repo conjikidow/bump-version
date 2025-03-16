@@ -14,15 +14,15 @@ inputs:
   label-major:
     description: "Label for major update"
     required: false
-    default: "update::major"
+    default: "major"
   label-minor:
     description: "Label for minor update"
     required: false
-    default: "update::minor"
+    default: "minor"
   label-patch:
     description: "Label for patch update"
     required: false
-    default: "update::patch"
+    default: "patch"
   labels-to-add:
     description: "Labels to add to the pull request"
     required: false
