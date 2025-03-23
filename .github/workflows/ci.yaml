@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Determine changed files
-        uses: tj-actions/changed-files@v46.0.2
+        uses: tj-actions/changed-files@v46.0.3
         id: changed-files
         with:
           files_yaml: |
