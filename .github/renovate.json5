@@ -3,6 +3,13 @@
   extends: [
     "config:recommended",
   ],
+  packageRules: [
+    {
+      "matchDepTypes": ["action"],
+      "excludePackagePrefixes": ["conjikidow/bump-version"],
+      "pinDigests": true,
+    },
+  ],
   labels: [
     "automated",
     "dependencies",
