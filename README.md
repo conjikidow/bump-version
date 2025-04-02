@@ -76,7 +76,7 @@ search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
 ```
 
-Note: `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
+> **Note:** `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
 
 To generate a default configuration file, run the following command:
 
