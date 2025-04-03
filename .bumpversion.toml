@@ -3,6 +3,5 @@ current_version = "1.2.1"
 
 [[tool.bumpversion.files]]
 filename = "README.md"
-serialize = ["{major}"]
 search = 'conjikidow/bump-version@v{current_version}'
 replace = 'conjikidow/bump-version@v{new_version}'
