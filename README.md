@@ -74,6 +74,11 @@ tag = false
 filename = "pyproject.toml"
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "CMakeLists.txt"
+search = "VERSION {current_version}"
+replace = "VERSION {new_version}"
 ```
 
 > **Note:** `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
