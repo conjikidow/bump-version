@@ -38,7 +38,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: conjikidow/bump-version@v1
+      - uses: conjikidow/bump-version@v1.2.1
         with:
           label-major: "major update"
           label-minor: "minor update"
@@ -74,6 +74,11 @@ tag = false
 filename = "pyproject.toml"
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "CMakeLists.txt"
+search = "VERSION {current_version}"
+replace = "VERSION {new_version}"
 ```
 
 > **Note:** `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
