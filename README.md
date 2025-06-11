@@ -26,7 +26,7 @@ Make sure your workflow includes the following:
 - The permissions under `permissions:` to allow the workflow to update repository contents and pull requests.
 
 ```yaml
-name: "Bump Version"
+name: Bump Version
 
 on:
   pull_request:
@@ -42,10 +42,10 @@ jobs:
     steps:
       - uses: conjikidow/bump-version@v1.2.2
         with:
-          label-major: "major update"
-          label-minor: "minor update"
-          label-patch: "patch update"
-          labels-to-add: "automated,version-bump"
+          label-major: 'major update'
+          label-minor: 'minor update'
+          label-patch: 'patch update'
+          labels-to-add: 'automated,version-bump'
 ```
 
 ### Inputs
