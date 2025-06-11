@@ -2,4 +2,4 @@ README.md
 .bumpversion.toml
 .typos.toml
 .github/CODEOWNERS
-.github/workflows/bump-version.yaml
+.github/workflows/*.yaml
