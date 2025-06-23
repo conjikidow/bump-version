@@ -59,7 +59,11 @@ jobs:
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `"patch"`     |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
 
-> **Note:** Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
+> [!TIP]
+> Set any of `label-major`, `label-minor`, or `label-patch` to an empty string (`''`) if you want to disable that bump type.
+
+> [!WARNING]
+> Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
 
 ### bump-my-version Configuration
 
@@ -83,7 +87,8 @@ search = "VERSION {current_version}"
 replace = "VERSION {new_version}"
 ```
 
-> **Note:** `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
+> [!IMPORTANT]
+> `commit` and `tag` should be set to `false` because this action handles these tasks automatically.
 
 To generate a default configuration file, run the following command:
 
