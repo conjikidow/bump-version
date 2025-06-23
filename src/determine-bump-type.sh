@@ -4,13 +4,19 @@ set -e
 # Fetch PR labels
 labels=$(gh api --jq '.labels.[].name' "/repos/${REPO}/pulls/${PR_NUMBER}" | tr '\n' ',' | sed 's/,$//')
 
+# Return success if a non-empty label name is found inside $labels
+has_label() {
+  local needle=$1
+  [[ -n "$needle" && "$labels" == *"$needle"* ]]
+}
+
 # Determine bump type
 bump_type="none"
-if [[ "$labels" == *"$LABEL_MAJOR"* ]]; then
+if has_label "$LABEL_MAJOR"; then
   bump_type="major"
-elif [[ "$labels" == *"$LABEL_MINOR"* ]]; then
+elif has_label "$LABEL_MINOR"; then
   bump_type="minor"
-elif [[ "$labels" == *"$LABEL_PATCH"* ]]; then
+elif has_label "$LABEL_PATCH"; then
   bump_type="patch"
 fi
 
