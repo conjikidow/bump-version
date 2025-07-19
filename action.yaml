@@ -90,6 +90,7 @@ runs:
 
     - name: Create tag
       if: env.SKIP_JOB != 'true'
+      id: create-tag
       shell: bash
       run: ${{ github.action_path }}/src/create-tag.sh
       env:
