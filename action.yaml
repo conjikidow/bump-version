@@ -26,7 +26,7 @@ inputs:
   labels-to-add:
     description: "Labels to add to the pull request"
     required: false
-    default: None
+    default: ""
 
 runs:
   using: "composite"
