@@ -1,7 +1,7 @@
 # Bump Version by Labels
 
 This GitHub Action automatically bumps the project version based on PR labels and creates a pull request.
-Once the version bump PR is merged, it automatically creates a new tag for the bumped version.
+Once the version bump PR is merged, it automatically creates a new tag and a release (optional) for the bumped version.
 
 This action follows the principles of [semantic versioning](https://semver.org), incrementing the version number based on the labels applied to the pull request.
 
@@ -11,6 +11,7 @@ This action follows the principles of [semantic versioning](https://semver.org),
 - Uses [bump-my-version](https://github.com/callowayproject/bump-my-version) to increment the version according to semantic versioning.
 - Creates a new branch and a pull request (PR) for the version bump.
 - Generates a corresponding Git tag once the version bump PR is merged.
+- Optionally creates a GitHub Release for the new tag.
 
 ## Usage
 
