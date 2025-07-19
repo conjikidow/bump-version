@@ -105,7 +105,7 @@ runs:
       run: ${{ github.action_path }}/src/create-release.sh
       env:
         GH_TOKEN: ${{ inputs.github-token }}
-        NEW_VERSION_TAG: v${{ steps.create-tag.outputs.new-version }}
+        NEW_VERSION_TAG: ${{ steps.create-tag.outputs.new-version }}
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
 
 branding:

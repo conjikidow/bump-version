@@ -58,4 +58,4 @@ elif [[ -n "$existing_previous_minor_tag" ]]; then
     git push origin "v${new_minor_version}"
 fi
 
-echo "new-version=${new_version}" >> "$GITHUB_OUTPUT"
+echo "new-version=v${new_version}" >> "$GITHUB_OUTPUT"
