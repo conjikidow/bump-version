@@ -57,7 +57,7 @@ jobs:
 | `label-major`                | The label used to trigger a major version bump  | No       | `"major"`     |
 | `label-minor`                | The label used to trigger a minor version bump  | No       | `"minor"`     |
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `"patch"`     |
-| `labels-to-add`              | The labels to add to the PR for version bumping | No       | None                  |
+| `labels-to-add`              | The labels to add to the PR for version bumping | No       | `""`                  |
 
 > [!TIP]
 > Set any of `label-major`, `label-minor`, or `label-patch` to an empty string (`''`) if you want to disable that bump type.
