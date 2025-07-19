@@ -46,19 +46,21 @@ jobs:
           label-minor: 'minor update'
           label-patch: 'patch update'
           labels-to-add: 'automated,version-bump'
+          create-release: 'true'
 ```
 
 ### Inputs
 
-| Name                         | Description                                     | Required | Default               |
-|------------------------------|-------------------------------------------------|:--------:|-----------------------|
-| `github-token`               | The GitHub token for authentication             | No       | `${{ github.token }}` |
-| `version-of-bump-my-version` | The version of `bump-my-version` to use         | No       | `'latest'`            |
-| `label-major`                | The label used to trigger a major version bump  | No       | `'major'`             |
-| `label-minor`                | The label used to trigger a minor version bump  | No       | `'minor'`             |
-| `label-patch`                | The label used to trigger a patch version bump  | No       | `'patch'`             |
-| `branch-prefix`              | The prefix for the version bump branch name     | No       | `'workflow'`          |
-| `labels-to-add`              | The labels to add to the PR for version bumping | No       | `''`                  |
+| Name                         | Description                                        | Required | Default               |
+|------------------------------|----------------------------------------------------|----------|-----------------------|
+| `github-token`               | The GitHub token for authentication                | No       | `${{ github.token }}` |
+| `version-of-bump-my-version` | The version of `bump-my-version` to use            | No       | `'latest'`            |
+| `label-major`                | The label used to trigger a major version bump     | No       | `'major'`             |
+| `label-minor`                | The label used to trigger a minor version bump     | No       | `'minor'`             |
+| `label-patch`                | The label used to trigger a patch version bump     | No       | `'patch'`             |
+| `branch-prefix`              | The prefix for the version bump branch name        | No       | `'workflow'`          |
+| `labels-to-add`              | The labels to add to the PR for version bumping    | No       | `''`                  |
+| `create-release`             | Whether to create a GitHub Release for the new tag | No       | `'false'`             |
 
 > [!TIP]
 > Set any of `label-major`, `label-minor`, or `label-patch` to an empty string (`''`) if you want to disable that bump type.
@@ -134,6 +136,9 @@ Follow these steps to configure the permissions:
 5. After merging, creates a Git tag
    - The branch name is parsed to extract the new version number.
    - A Git tag (`vX.Y.Z`) is pushed to mark the new release.
+
+6. Optionally creates a GitHub Release
+   - If `create-release` is set to `true`, a GitHub Release is created for the new tag, with automatically generated release notes.
 
 ### Tag Management
 
