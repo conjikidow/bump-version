@@ -1,35 +1,35 @@
-name: "Bump Version by Labels"
-description: "Automatically bumps version based on PR labels and creates a pull request and tag."
-author: "conjikidow"
+name: 'Bump Version by Labels'
+description: 'Automatically bumps version based on PR labels and creates a pull request and tag.'
+author: 'conjikidow'
 
 inputs:
   github-token:
-    description: "GitHub Token"
+    description: 'GitHub Token'
     required: false
     default: ${{ github.token }}
   version-of-bump-my-version:
-    description: "Version of bump-my-version"
+    description: 'Version of bump-my-version'
     required: false
-    default: "latest"
+    default: 'latest'
   label-major:
-    description: "Label for major update"
+    description: 'Label for major update'
     required: false
-    default: "major"
+    default: 'major'
   label-minor:
-    description: "Label for minor update"
+    description: 'Label for minor update'
     required: false
-    default: "minor"
+    default: 'minor'
   label-patch:
-    description: "Label for patch update"
+    description: 'Label for patch update'
     required: false
-    default: "patch"
+    default: 'patch'
   labels-to-add:
-    description: "Labels to add to the pull request"
+    description: 'Labels to add to the pull request'
     required: false
-    default: ""
+    default: ''
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Check if PR is merged
       shell: bash
@@ -89,5 +89,5 @@ runs:
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
 
 branding:
-  icon: "chevrons-up"
-  color: "green"
+  icon: 'chevrons-up'
+  color: 'green'
