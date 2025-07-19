@@ -7,16 +7,16 @@ if [ -z "$GH_TOKEN" ]; then
     exit 1
 fi
 
-# Ensure NEW_VERSION_TAG is set
-if [ -z "$NEW_VERSION_TAG" ]; then
-    echo "NEW_VERSION_TAG is not set. Exiting."
-    exit 1
-fi
-
 # Ensure MERGE_COMMIT_SHA is set
 if [ -z "$MERGE_COMMIT_SHA" ]; then
     echo "MERGE_COMMIT_SHA is not set. Exiting."
     exit 1
+fi
+
+# Verify if new version tag is set
+if [ -z "$NEW_VERSION_TAG" ]; then
+    echo "New version tag not found. Skipping."
+    exit 0
 fi
 
 # Create GitHub Release
