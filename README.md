@@ -46,6 +46,7 @@ jobs:
           label-minor: 'minor update'
           label-patch: 'patch update'
           labels-to-add: 'automated,version-bump'
+          create-release: 'true'
 ```
 
 ### Inputs
