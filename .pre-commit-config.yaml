@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.33.1
+    hooks:
+      - id: typos
+        args: ["--force-exclude"]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]
+      - id: pretty-format-json
+        args: ["--autofix", "--no-sort-keys"]
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+      - id: check-xml
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-vcs-permalinks
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: no-commit-to-branch
