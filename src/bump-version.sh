@@ -20,7 +20,7 @@ fi
 base_branch=$(git branch --show-current)
 
 # Create a new branch for the version bump
-new_branch="workflow/bump-version-from-${previous_version}-to-${current_version}"
+new_branch="${BRANCH_PREFIX}/bump-version-from-${previous_version}-to-${current_version}"
 git checkout -b "$new_branch"
 
 # Commit the version bump changes
