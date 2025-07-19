@@ -54,9 +54,10 @@ jobs:
 |------------------------------|-------------------------------------------------|:--------:|-----------------------|
 | `github-token`               | The GitHub token for authentication             | No       | `${{ github.token }}` |
 | `version-of-bump-my-version` | The version of `bump-my-version` to use         | No       | `'latest'`            |
-| `label-major`                | The label used to trigger a major version bump  | No       | `'major'`     |
-| `label-minor`                | The label used to trigger a minor version bump  | No       | `'minor'`     |
-| `label-patch`                | The label used to trigger a patch version bump  | No       | `'patch'`     |
+| `label-major`                | The label used to trigger a major version bump  | No       | `'major'`             |
+| `label-minor`                | The label used to trigger a minor version bump  | No       | `'minor'`             |
+| `label-patch`                | The label used to trigger a patch version bump  | No       | `'patch'`             |
+| `branch-prefix`              | The prefix for the version bump branch name     | No       | `'workflow'`          |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | `''`                  |
 
 > [!TIP]
@@ -127,7 +128,7 @@ Follow these steps to configure the permissions:
    - Checks if the version was actually updated.
 
 4. Creates a new branch and PR for the version bump
-   - If the version is updated, a new branch (`workflow/bump-version-from-X.Y.W-to-X.Y.Z`) is created.
+   - If the version is updated, a new branch (`${branch-prefix}/bump-version-from-X.Y.W-to-X.Y.Z`) is created.
    - A PR is automatically opened to merge the version bump.
 
 5. After merging, creates a Git tag

@@ -23,6 +23,10 @@ inputs:
     description: 'Label for patch update'
     required: false
     default: 'patch'
+  branch-prefix:
+    description: 'Prefix for the version bump branch name'
+    required: false
+    default: 'workflow'
   labels-to-add:
     description: 'Labels to add to the pull request'
     required: false
@@ -78,6 +82,7 @@ runs:
         VERSION_OF_BUMP_MY_VERSION: ${{ inputs.version-of-bump-my-version }}
         BUMP_TYPE: ${{ steps.bump-type.outputs.type }}
         LABELS_TO_ADD: ${{ inputs.labels-to-add }}
+        BRANCH_PREFIX: ${{ inputs.branch-prefix }}
 
     - name: Create tag
       if: env.SKIP_JOB != 'true'
@@ -87,6 +92,7 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         HEAD_REF: ${{ github.event.pull_request.head.ref }}
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        BRANCH_PREFIX: ${{ inputs.branch-prefix }}
 
 branding:
   icon: 'chevrons-up'

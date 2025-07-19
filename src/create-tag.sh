@@ -10,14 +10,14 @@ if [ -z "$branch_name" ]; then
 fi
 
 # Verify if branch_name matches the expected pattern
-if ! [[ "$branch_name" =~ ^workflow/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+if ! [[ "$branch_name" =~ ^${BRANCH_PREFIX}/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "This branch does not match the expected pattern. Skipping."
     exit 0
 fi
 
 # Extract versions from the branch name
-previous_version=$(echo "$branch_name" | sed -E 's/^workflow\/bump-version-from-([0-9]+\.[0-9]+\.[0-9]+)-to-[0-9]+\.[0-9]+\.[0-9]+$/\1/')
-new_version=$(echo "$branch_name" | sed -E 's/^workflow\/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+previous_version=$(echo "$branch_name" | sed -E "s/^${BRANCH_PREFIX}\/bump-version-from-([0-9]+\.[0-9]+\.[0-9]+)-to-[0-9]+\.[0-9]+\.[0-9]+$/\1/")
+new_version=$(echo "$branch_name" | sed -E "s/^${BRANCH_PREFIX}\/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-([0-9]+\.[0-9]+\.[0-9]+)$/\1/")
 
 # Extract major and minor versions
 previous_major_version=$(cut -d. -f1 <<< "$previous_version")
