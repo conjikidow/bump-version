@@ -27,6 +27,10 @@ inputs:
     description: 'Prefix for the version bump branch name'
     required: false
     default: 'workflow'
+  create-release:
+    description: 'Whether to create a GitHub Release for the new tag.'
+    required: false
+    default: 'false'
   labels-to-add:
     description: 'Labels to add to the pull request'
     required: false
@@ -93,6 +97,15 @@ runs:
         HEAD_REF: ${{ github.event.pull_request.head.ref }}
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
         BRANCH_PREFIX: ${{ inputs.branch-prefix }}
+
+    - name: Create GitHub Release
+      if: env.SKIP_JOB != 'true' && inputs.create-release == 'true'
+      shell: bash
+      run: ${{ github.action_path }}/src/create-release.sh
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        NEW_VERSION_TAG: v${{ steps.create-tag.outputs.new-version }}
+        MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
 
 branding:
   icon: 'chevrons-up'

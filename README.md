@@ -58,6 +58,7 @@ jobs:
 | `label-minor`                | The label used to trigger a minor version bump  | No       | `'minor'`             |
 | `label-patch`                | The label used to trigger a patch version bump  | No       | `'patch'`             |
 | `branch-prefix`              | The prefix for the version bump branch name     | No       | `'workflow'`          |
+| `create-release`             | Whether to create a GitHub Release for the new tag. | No       | `'false'`             |
 | `labels-to-add`              | The labels to add to the PR for version bumping | No       | `''`                  |
 
 > [!TIP]
@@ -134,6 +135,9 @@ Follow these steps to configure the permissions:
 5. After merging, creates a Git tag
    - The branch name is parsed to extract the new version number.
    - A Git tag (`vX.Y.Z`) is pushed to mark the new release.
+
+6. Optionally creates a GitHub Release
+   - If `create-release` is set to `true`, a GitHub Release is created for the new tag, with automatically generated release notes.
 
 ### Tag Management
 

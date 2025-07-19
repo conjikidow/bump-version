@@ -57,3 +57,5 @@ elif [[ -n "$existing_previous_minor_tag" ]]; then
     git tag "v${new_minor_version}" "$MERGE_COMMIT_SHA"
     git push origin "v${new_minor_version}"
 fi
+
+echo "new-version=${new_version}" >> "$GITHUB_OUTPUT"
