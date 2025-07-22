@@ -35,6 +35,13 @@ inputs:
     description: 'Whether to create a GitHub Release for the new tag'
     required: false
     default: 'false'
+outputs:
+  version-bumped:
+    description: "Whether the version was bumped or not"
+    value: ${{ steps.create-tag.outputs.version-bumped }}
+  new-version:
+    description: "The new version number if bumped; otherwise, blank"
+    value: ${{ steps.create-tag.outputs.new-version }}
 
 runs:
   using: 'composite'
@@ -105,7 +112,7 @@ runs:
       run: ${{ github.action_path }}/src/create-release.sh
       env:
         GH_TOKEN: ${{ inputs.github-token }}
-        NEW_VERSION_TAG: ${{ steps.create-tag.outputs.new-version }}
+        NEW_VERSION: ${{ steps.create-tag.outputs.new-version }}
         MERGE_COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha }}
 
 branding:
