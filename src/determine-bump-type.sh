@@ -1,8 +1,15 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+
+if ! command -v gh &> /dev/null; then
+    echo "Error: GitHub CLI (gh) is not installed. Please install it to continue." >&2
+    exit 1
+fi
 
 # Fetch PR labels
+echo "Fetching PR labels..."
 labels=$(gh api --jq '.labels.[].name' "/repos/${REPO}/pulls/${PR_NUMBER}" | tr '\n' ',' | sed 's/,$//')
+echo "Found labels: ${labels}"
 
 # Return success if a non-empty label name is found inside $labels
 has_label() {
@@ -19,6 +26,8 @@ elif has_label "$LABEL_MINOR"; then
 elif has_label "$LABEL_PATCH"; then
   bump_type="patch"
 fi
+
+echo "Bump type determined: ${bump_type}"
 
 # Output results for GitHub Actions
 echo "type=${bump_type}" >> "$GITHUB_OUTPUT"
