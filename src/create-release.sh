@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Verify if new version tag is set
 if [ -z "$NEW_VERSION_TAG" ]; then

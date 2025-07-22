@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Fetch PR labels
 echo "Fetching PR labels..."
