@@ -107,7 +107,7 @@ runs:
         BRANCH_PREFIX: ${{ inputs.branch-prefix }}
 
     - name: Create GitHub Release
-      if: env.SKIP_JOB != 'true' && inputs.create-release == 'true'
+      if: env.SKIP_JOB != 'true' && inputs.create-release == 'true' && steps.create-tag.outputs.version-bumped == 'true'
       shell: bash
       run: ${{ github.action_path }}/src/create-release.sh
       env:

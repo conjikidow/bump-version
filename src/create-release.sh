@@ -6,12 +6,6 @@ if ! command -v gh &> /dev/null; then
     exit 1
 fi
 
-# Verify if new version is set
-if [ -z "$NEW_VERSION" ]; then
-    echo "New version not found. Skipping."
-    exit 0
-fi
-
 NEW_VERSION_TAG="v${NEW_VERSION}"
 
 # Create GitHub Release
