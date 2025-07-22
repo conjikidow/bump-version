@@ -42,10 +42,20 @@ git push -f origin "$new_branch"
 
 # Create a pull request for the version bump
 echo "Creating pull request..."
-gh pr create --title "Bump version from ${previous_version} to ${current_version}" \
+if ! PR_OUTPUT=$(gh pr create --title "Bump version from ${previous_version} to ${current_version}" \
              --body "This PR updates the version from ${previous_version} to ${current_version}." \
              --base "$base_branch" \
              --head "$new_branch" \
-             --label "$LABELS_TO_ADD"
+             --label "$LABELS_TO_ADD" 2>&1); then
+    if echo "$PR_OUTPUT" | grep -q "GitHub Actions is not permitted to create or approve pull requests"; then
+        echo "Error: Failed to create pull request due to insufficient permissions." >&2
+        echo "Please ensure 'Allow GitHub Actions to create and approve pull requests' is enabled in your repository settings (Settings > Actions > General > Workflow permissions). Refer to the README for more details." >&2
+        exit 1
+    else
+        echo "Error: Failed to create pull request." >&2
+        echo "$PR_OUTPUT" >&2
+        exit 1
+    fi
+fi
 
 echo "Pull request created successfully."
