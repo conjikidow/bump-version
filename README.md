@@ -69,6 +69,13 @@ jobs:
 > [!WARNING]
 > Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
 
+### Outputs
+
+| Name             | Description                                                                     |
+|------------------|---------------------------------------------------------------------------------|
+| `version-bumped` | `true` if the version was bumped and a new tag was created; otherwise, `false`. |
+| `new-version`    | The new version number (e.g., `1.2.4`). This is empty if no bump occurred.      |
+
 ### bump-my-version Configuration
 
 To use this action, ensure that your project is configured to work with `bump-my-version`.
