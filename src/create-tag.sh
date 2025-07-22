@@ -18,6 +18,7 @@ fi
 # Extract versions from the branch name
 previous_version=$(echo "$branch_name" | sed -E "s/^${BRANCH_PREFIX}\/bump-version-from-([0-9]+\.[0-9]+\.[0-9]+)-to-[0-9]+\.[0-9]+\.[0-9]+$/\1/")
 new_version=$(echo "$branch_name" | sed -E "s/^${BRANCH_PREFIX}\/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-([0-9]+\.[0-9]+\.[0-9]+)$/\1/")
+echo "Extracted versions: previous=${previous_version}, new=${new_version}"
 
 # Extract major and minor versions
 previous_major_version=$(cut -d. -f1 <<< "$previous_version")
@@ -26,6 +27,7 @@ new_major_version=$(cut -d. -f1 <<< "$new_version")
 new_minor_version=$(cut -d. -f1,2 <<< "$new_version")
 
 # Create full version tag (e.g., v1.2.3)
+echo "Creating new tag: v${new_version}"
 git tag "v${new_version}" "$MERGE_COMMIT_SHA"
 git push origin "v${new_version}"
 
