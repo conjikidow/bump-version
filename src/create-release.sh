@@ -1,6 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+if ! command -v gh &> /dev/null; then
+    echo "Error: GitHub CLI (gh) is not installed. Please install it to continue." >&2
+    exit 1
+fi
+
 # Verify if new version tag is set
 if [ -z "$NEW_VERSION_TAG" ]; then
     echo "New version tag not found. Skipping."
