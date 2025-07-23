@@ -40,7 +40,7 @@ outputs:
     description: "Whether the version was bumped or not"
     value: ${{ steps.create-tag.outputs.version-bumped }}
   new-version:
-    description: "The new version number if bumped; otherwise, blank"
+    description: "The new version number if bumped; otherwise, empty"
     value: ${{ steps.create-tag.outputs.new-version }}
 
 runs:

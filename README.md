@@ -115,10 +115,10 @@ jobs:
 
 ### Outputs
 
-| Name             | Description                                                                     |
-|------------------|---------------------------------------------------------------------------------|
-| `version-bumped` | `true` if the version was bumped and a new tag was created; otherwise, `false`. |
-| `new-version`    | The new version number (e.g., `1.2.4`). This is empty if no bump occurred.      |
+| Name             | Description                                                                             |
+|------------------|-----------------------------------------------------------------------------------------|
+| `version-bumped` | `true` if the version was bumped and a new tag was created; otherwise, `false`.         |
+| `new-version`    | The new version number (e.g., `1.2.4`). This is empty when `version-bumped` is `false`. |
 
 ### bump-my-version Configuration
 
