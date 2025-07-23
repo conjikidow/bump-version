@@ -12,6 +12,8 @@ fi
 # Verify if branch_name matches the expected pattern
 if ! [[ "$branch_name" =~ ^${BRANCH_PREFIX}/bump-version-from-[0-9]+\.[0-9]+\.[0-9]+-to-[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "This branch does not match the expected pattern. Skipping."
+    echo "version-bumped=false" >> "$GITHUB_OUTPUT"
+    echo "new-version=" >> "$GITHUB_OUTPUT"
     exit 0
 fi
 
@@ -60,4 +62,5 @@ elif [[ -n "$existing_previous_minor_tag" ]]; then
     git push origin "v${new_minor_version}"
 fi
 
-echo "new-version=v${new_version}" >> "$GITHUB_OUTPUT"
+echo "version-bumped=true" >> "$GITHUB_OUTPUT"
+echo "new-version=${new_version}" >> "$GITHUB_OUTPUT"

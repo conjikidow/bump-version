@@ -17,14 +17,16 @@ This action follows the principles of [semantic versioning](https://semver.org),
 
 ### Workflow Example
 
-Below is an example workflow you can add to your repository to automatically bump the version when a pull request is merged.
-You can save it in a file such as `.github/workflows/bump-version.yaml`.
+Below are example workflows you can add to your repository to automatically bump the version when a pull request is merged.
+You can save them in a file such as `.github/workflows/bump-version.yaml`.
 
 Make sure your workflow includes the following:
 
 - The `on: pull_request: types: [closed]` trigger to run the workflow whenever a pull request is closed.
 - The condition `if: github.event.pull_request.merged == true` to ensure the workflow only proceeds if the pull request was merged.
-- The permissions under `permissions:` to allow the workflow to update repository contents and pull requests.
+- The `permissions:` section to allow the workflow to update repository contents and pull requests.
+
+#### Basic Example
 
 ```yaml
 name: Bump Version
@@ -41,7 +43,8 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: conjikidow/bump-version@v1.3.1
+      - name: Bump Version
+        uses: conjikidow/bump-version@v1.3.1
         with:
           label-major: 'major update'
           label-minor: 'minor update'
@@ -50,24 +53,72 @@ jobs:
           create-release: 'true'
 ```
 
+#### Example with External Release Tools
+
+You can also integrate this action with external tools or actions by using the outputs provided.
+The following example uses [`softprops/action-gh-release`](https://github.com/softprops/action-gh-release) to create a GitHub Release when the version has actually been bumped:
+
+```yaml
+name: Bump Version with External Release
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Bump Version
+        id: bump-version
+        uses: conjikidow/bump-version@v1.3.1
+
+      # This step is just a placeholder. You can replace it with your own script or external tools.
+      - name: Create Release Notes
+        if: steps.bump-version.outputs.version-bumped == 'true'
+        run: |
+            cat <<EOF > custom-release-notes.md
+            ## What's Changed
+            ...
+            EOF
+
+      - name: Create GitHub Release
+        if: steps.bump-version.outputs.version-bumped == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump-version.outputs.new-version }}
+          body_path: custom-release-notes.md
+```
+
 ### Inputs
 
-| Name                         | Description                                        | Required | Default               |
-|------------------------------|----------------------------------------------------|----------|-----------------------|
-| `github-token`               | The GitHub token for authentication                | No       | `${{ github.token }}` |
-| `version-of-bump-my-version` | The version of `bump-my-version` to use            | No       | `'latest'`            |
-| `label-major`                | The label used to trigger a major version bump     | No       | `'major'`             |
-| `label-minor`                | The label used to trigger a minor version bump     | No       | `'minor'`             |
-| `label-patch`                | The label used to trigger a patch version bump     | No       | `'patch'`             |
-| `branch-prefix`              | The prefix for the version bump branch name        | No       | `'workflow'`          |
-| `labels-to-add`              | The labels to add to the PR for version bumping    | No       | `''`                  |
-| `create-release`             | Whether to create a GitHub Release for the new tag | No       | `'false'`             |
+| Name                         | Description                                         | Required | Default               |
+|------------------------------|-----------------------------------------------------|----------|-----------------------|
+| `github-token`               | The GitHub token for authentication.                | No       | `${{ github.token }}` |
+| `version-of-bump-my-version` | The version of `bump-my-version` to use.            | No       | `'latest'`            |
+| `label-major`                | The label used to trigger a major version bump.     | No       | `'major'`             |
+| `label-minor`                | The label used to trigger a minor version bump.     | No       | `'minor'`             |
+| `label-patch`                | The label used to trigger a patch version bump.     | No       | `'patch'`             |
+| `branch-prefix`              | The prefix for the version bump branch name.        | No       | `'workflow'`          |
+| `labels-to-add`              | The labels to add to the PR for version bumping.    | No       | `''`                  |
+| `create-release`             | Whether to create a GitHub Release for the new tag. | No       | `'false'`             |
 
 > [!TIP]
 > Set any of `label-major`, `label-minor`, or `label-patch` to an empty string (`''`) if you want to disable that bump type.
 
 > [!WARNING]
 > Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
+
+### Outputs
+
+| Name             | Description                                                                             |
+|------------------|-----------------------------------------------------------------------------------------|
+| `version-bumped` | `true` if the version was bumped and a new tag was created; otherwise, `false`.         |
+| `new-version`    | The new version number (e.g., `1.2.4`). This is empty when `version-bumped` is `false`. |
 
 ### bump-my-version Configuration
 
