@@ -4,43 +4,43 @@ author: 'conjikidow'
 
 inputs:
   github-token:
-    description: 'GitHub Token'
+    description: 'The GitHub token for authentication.'
     required: false
     default: ${{ github.token }}
   version-of-bump-my-version:
-    description: 'Version of bump-my-version'
+    description: 'The version of `bump-my-version` to use.'
     required: false
     default: 'latest'
   label-major:
-    description: 'Label for major update'
+    description: 'The label used to trigger a major version bump.'
     required: false
     default: 'major'
   label-minor:
-    description: 'Label for minor update'
+    description: 'The label used to trigger a minor version bump.'
     required: false
     default: 'minor'
   label-patch:
-    description: 'Label for patch update'
+    description: 'The label used to trigger a patch version bump.'
     required: false
     default: 'patch'
   branch-prefix:
-    description: 'Prefix for the version bump branch name'
+    description: 'The prefix for the version bump branch name.'
     required: false
     default: 'workflow'
   labels-to-add:
-    description: 'Labels to add to the pull request'
+    description: 'Comma-separated string of labels to add to the PR for version bumping.'
     required: false
     default: ''
   create-release:
-    description: 'Whether to create a GitHub Release for the new tag'
+    description: 'Whether to create a GitHub Release for the new tag.'
     required: false
     default: 'false'
 outputs:
   version-bumped:
-    description: "Whether the version was bumped or not"
+    description: "`true` if the version was bumped and a new tag was created; otherwise, `false`."
     value: ${{ steps.create-tag.outputs.version-bumped }}
   new-version:
-    description: "The new version number if bumped; otherwise, empty"
+    description: "The new version number (e.g., `1.2.4`). This is empty when `version-bumped` is `false`."
     value: ${{ steps.create-tag.outputs.new-version }}
 
 runs:
