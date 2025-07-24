@@ -1,15 +1,15 @@
 # Bump Version by Labels
 
-This GitHub Action automatically bumps the project version based on PR labels and creates a pull request.
+This GitHub Action automatically bumps the project version based on pull request (PR) labels and creates a PR.
 Once the version bump PR is merged, it automatically creates a new tag and a release (optional) for the bumped version.
 
-This action follows the principles of [semantic versioning](https://semver.org), incrementing the version number based on the labels applied to the pull request.
+This action follows the principles of [semantic versioning](https://semver.org), incrementing the version number based on the labels applied to the PR.
 
 ## Features
 
 - Automatically determines the version bump type based on PR labels.
 - Uses [bump-my-version](https://github.com/callowayproject/bump-my-version) to increment the version according to semantic versioning.
-- Creates a new branch and a pull request (PR) for the version bump.
+- Creates a new branch and a PR for the version bump.
 - Generates a corresponding Git tag once the version bump PR is merged.
 - Optionally creates a GitHub Release for the new tag.
 
@@ -17,14 +17,14 @@ This action follows the principles of [semantic versioning](https://semver.org),
 
 ### Workflow Example
 
-Below are example workflows you can add to your repository to automatically bump the version when a pull request is merged.
+Below are example workflows you can add to your repository to automatically bump the version when a PR is merged.
 You can save them in a file such as `.github/workflows/bump-version.yaml`.
 
 Make sure your workflow includes the following:
 
-- The `on: pull_request: types: [closed]` trigger to run the workflow whenever a pull request is closed.
-- The condition `if: github.event.pull_request.merged == true` to ensure the workflow only proceeds if the pull request was merged.
-- The `permissions:` section to allow the workflow to update repository contents and pull requests.
+- The `on: pull_request: types: [closed]` trigger to run the workflow whenever a PR is closed.
+- The condition `if: github.event.pull_request.merged == true` to ensure the workflow only proceeds if the PR was merged.
+- The `permissions:` section to allow the workflow to update repository contents and PRs.
 
 #### Basic Example
 
@@ -163,7 +163,7 @@ Follow these steps to configure the permissions:
 2. On the left-hand menu, select **Actions/General**.
 3. Under the **Workflow permissions** section, ensure the following options are selected:
    - **`Read and write permissions`**: This grants read and write access to the repository for all scopes.
-   - **`Allow GitHub Actions to create and approve pull requests`**: This allows GitHub Actions to create pull requests.
+   - **`Allow GitHub Actions to create and approve PRs`**: This allows GitHub Actions to create PRs.
 4. Save the changes.
 
 ![image](https://github.com/user-attachments/assets/da55e896-e087-486e-aadc-7fc1283dc652)
