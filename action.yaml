@@ -82,7 +82,7 @@ runs:
 
     - name: Install uv
       if: env.SKIP_JOB != 'true' && steps.bump-type.outputs.type != 'none'
-      uses: astral-sh/setup-uv@4959332f0f014c5280e7eac8b70c90cb574c9f9b # v6.6.0
+      uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6.6.1
 
     - name: Run bump script
       if: env.SKIP_JOB != 'true' && steps.bump-type.outputs.type != 'none'
