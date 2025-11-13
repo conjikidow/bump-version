@@ -10,6 +10,9 @@
       "pinDigests": true,
     },
   ],
+  "pre-commit": {
+    enabled: true,
+  },
   labels: [
     "automated",
     "dependencies",
