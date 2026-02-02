@@ -22,9 +22,13 @@
   description: "Patch update"
   color: "003366"
 
-- name: "tools"
-  description: "Changes to tools like CI/CD"
-  color: "D1E8D1"
+- name: "ci"
+  description: "Changes to CI workflows"
+  color: "FFD580"
+
+- name: "pre-commit"
+  description: "Changes to pre-commit hooks"
+  color: "FFD580"
 
 - name: "documentation"
   description: "Improvements or additions to documentation"
