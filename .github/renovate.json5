@@ -14,11 +14,6 @@
       addLabels: ["pre-commit"],
       automerge: true,
     },
-    {
-      "matchDepTypes": ["action"],
-      "matchPackageNames": ["conjikidow/bump-version{/,}**"],
-      "pinDigests": false
-    }
   ],
   "pre-commit": {
     enabled: true,
