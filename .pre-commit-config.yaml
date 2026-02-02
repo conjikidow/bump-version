@@ -1,3 +1,5 @@
+default_stages: [pre-commit]
+
 repos:
   - repo: https://github.com/crate-ci/typos
     rev: v1.42.3
@@ -31,3 +33,11 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-shebang-scripts-are-executable
       - id: no-commit-to-branch
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.13.0
+    hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages:
+          - pre-push
