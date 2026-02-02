@@ -34,7 +34,7 @@ git checkout -b "$new_branch"
 
 # Commit the version bump changes
 git add .
-git commit -m "Bump version: ${previous_version} -> ${current_version}"
+git commit -m "chore(release): bump version from ${previous_version} to ${current_version}"
 
 # Push the new branch to the repository
 echo "Pushing new branch to remote..."
@@ -42,7 +42,7 @@ git push -f origin "$new_branch"
 
 # Create a pull request for the version bump
 echo "Creating pull request..."
-if ! PR_OUTPUT=$(gh pr create --title "Bump version from ${previous_version} to ${current_version}" \
+if ! PR_OUTPUT=$(gh pr create --title "chore(release): bump version from ${previous_version} to ${current_version}" \
              --body "This PR updates the version from ${previous_version} to ${current_version}." \
              --base "$base_branch" \
              --head "$new_branch" \
