@@ -1,24 +1,30 @@
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
-    'config:recommended',
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
   ],
   packageRules: [
     {
-      matchDepTypes: [
-        'action',
-      ],
-      pinDigests: true,
-      matchPackageNames: [
-        '!conjikidow/bump-version{/,}**',
-      ],
+      matchCategories: ["ci"],
+      addLabels: ["ci"],
     },
+    {
+      matchManagers: ["pre-commit"],
+      addLabels: ["pre-commit"],
+      automerge: true,
+    },
+    {
+      "matchDepTypes": ["action"],
+      "matchPackageNames": ["conjikidow/bump-version{/,}**"],
+      "pinDigests": false
+    }
   ],
-  'pre-commit': {
+  "pre-commit": {
     enabled: true,
   },
   labels: [
-    'automated',
-    'dependencies',
+    "automated",
+    "dependencies",
   ],
 }
