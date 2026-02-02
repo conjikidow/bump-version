@@ -1,0 +1,41 @@
+name: Manage Pull Requests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions: {}
+
+jobs:
+
+  labeler:
+    name: labeler
+    if: github.event.action != 'edited'
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labels/labeler.yaml
+          sync-labels: false
+          dot: true
+
+  lint-pr-title:
+    name: Lint PR title
+    if: github.event.action != 'edited' || github.event.changes.title != null
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Commitizen
+        uses: commitizen-tools/setup-cz@578def531656e522cd8978e6df62d626593e0a5f # v0.7.0
+        with:
+          python-version: '3.x'
+
+      - name: Lint pull request title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: cz check --message "$PR_TITLE"

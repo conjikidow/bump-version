@@ -7,6 +7,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+
 jobs:
 
   determine-changes:
@@ -22,6 +25,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Determine changed files
         uses: tj-actions/changed-files@e0021407031f5be11a464abee9a0776171c79891 # v47.0.1
@@ -31,8 +35,8 @@ jobs:
             src:
               - 'src/**.sh'
             doc:
-              - '**/**.md'
-              - docs/**
+              - '**/*.md'
+              - '**/docs/**'
             workflow:
               - .github/workflows/**
 
@@ -44,10 +48,13 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      security-events: write
 
     steps:
       - name: Checkout the main repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - uses: reviewdog/action-actionlint@e58ee9d111489c31395fbe4857b0be6e7635dbda # v1.70.0
         with:
@@ -55,13 +62,33 @@ jobs:
           reporter: github-pr-review
           fail_level: error
 
-  check-spelling:
-    name: Check spelling
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@135698455da5c3b3e55f73f4419e481ab68cdd95 # v0.4.1
+
+  check-prek:
+    name: Check prek
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the main repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check prek
+        uses: j178/prek-action@564dda4cfa5e96aafdc4a5696c4bf7b46baae5ac # v1.1.0
+        with:
+          extra-args: '--all-files --skip no-commit-to-branch'
+
+  check-typos:
+    name: Check typos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Check spelling
         uses: crate-ci/typos@06d010dfe4c84fdab1a25ea02b57b3585018ba80 # v1.42.3
@@ -69,3 +96,27 @@ jobs:
           files: |
             .
             .github/**
+
+  lint-commit-messages:
+    name: Lint commit messages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Commitizen
+        uses: commitizen-tools/setup-cz@578def531656e522cd8978e6df62d626593e0a5f # v0.7.0
+        with:
+          python-version: '3.x'
+
+      - name: Lint commit messages on push
+        if: github.event_name == 'push'
+        run: cz check --rev-range ${{ github.event.before }}..${{ github.sha }}
+
+      - name: Lint commit messages on pull request
+        if: github.event_name == 'pull_request'
+        run: cz check --rev-range ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
