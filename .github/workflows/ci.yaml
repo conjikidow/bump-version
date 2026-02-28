@@ -21,6 +21,7 @@ jobs:
       md: ${{ steps.changed-files.outputs.md_any_changed }}
       yaml: ${{ steps.changed-files.outputs.yaml_any_changed }}
       toml: ${{ steps.changed-files.outputs.toml_any_changed }}
+      shell: ${{ steps.changed-files.outputs.shell_any_changed }}
 
     steps:
       - name: Checkout the main repository
@@ -48,6 +49,8 @@ jobs:
             toml:
               - '**/*.toml'
               - .taplo.toml
+            shell:
+              - '**/*.sh'
 
   lint-gh-actions:
     name: Lint GitHub Actions
@@ -123,7 +126,6 @@ jobs:
               -efm="%f:%l %m" \
               -name=markdownlint \
               -reporter=github-pr-review \
-              -filter-mode=added \
               -fail-level=error || reviewdog_rc=$?
           if [ $markdownlint_rc -ne 0 ] && ! grep -Eq '^[^:]+:[0-9]+(:[0-9]+)? ' /tmp/markdownlint-report.txt; then
             echo "::error title=markdownlint::markdownlint failed before producing parseable diagnostics"
@@ -189,6 +191,47 @@ jobs:
 
       - name: Lint TOML
         run: taplo lint
+
+  lint-shell-scripts:
+    name: Lint Shell Scripts
+    needs: determine-changes
+    if: ${{ needs.determine-changes.outputs.shell == 'true' || needs.determine-changes.outputs.workflow_ci == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install ShellCheck
+        if: github.event_name != 'pull_request'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          readarray -d '' -t shell_files < <(find . -type f -name '*.sh' -not -path './.git/*' -print0)
+          if [ ${#shell_files[@]} -eq 0 ]; then
+            echo "No shell scripts found."
+            exit 0
+          fi
+          shellcheck --external-sources "${shell_files[@]}"
+
+      - name: Run shellcheck (reviewdog)
+        if: github.event_name == 'pull_request'
+        uses: reviewdog/action-shellcheck@5ebd09ddbe2ebb471646ce234c6c8dd18663ca7c # v1.30.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: error
 
   check-prek:
     name: Check prek
