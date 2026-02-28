@@ -7,13 +7,16 @@ rules:
     ignore: |
       .github/workflows/*.yml
       .github/workflows/*.yaml
+      action.yaml
   truthy:
     ignore: |
       .github/workflows/*.yml
       .github/workflows/*.yaml
+      action.yaml
   comments:
     ignore: |
       .github/workflows/*.yml
       .github/workflows/*.yaml
+      action.yaml
   line-length:
     max: 120
