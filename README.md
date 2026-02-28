@@ -3,12 +3,14 @@
 This GitHub Action automatically bumps the project version based on pull request (PR) labels and creates a PR.
 Once the version bump PR is merged, it automatically creates a new tag and a release (optional) for the bumped version.
 
-This action follows the principles of [semantic versioning](https://semver.org), incrementing the version number based on the labels applied to the PR.
+This action follows the principles of [semantic versioning](https://semver.org),
+incrementing the version number based on the labels applied to the PR.
 
 ## Features
 
 - Automatically determines the version bump type based on PR labels.
-- Uses [bump-my-version](https://github.com/callowayproject/bump-my-version) to increment the version according to semantic versioning.
+- Uses [bump-my-version](https://github.com/callowayproject/bump-my-version)
+  to increment the version according to semantic versioning.
 - Creates a new branch and a PR for the version bump.
 - Generates a corresponding Git tag once the version bump PR is merged.
 - Optionally creates a GitHub Release for the new tag.
@@ -56,7 +58,8 @@ jobs:
 #### Example with External Release Tools
 
 You can also integrate this action with external tools or actions by using the outputs provided.
-The following example uses [`softprops/action-gh-release`](https://github.com/softprops/action-gh-release) to create a GitHub Release when the version has actually been bumped:
+The following example uses [`softprops/action-gh-release`](https://github.com/softprops/action-gh-release)
+to create a GitHub Release when the version has actually been bumped:
 
 ```yaml
 name: Bump Version with External Release
@@ -96,22 +99,25 @@ jobs:
 
 ### Inputs
 
-| Name                         | Description                                                            | Required | Default               |
-|------------------------------|------------------------------------------------------------------------|----------|-----------------------|
-| `github-token`               | The GitHub token for authentication.                                   | No       | `${{ github.token }}` |
-| `version-of-bump-my-version` | The version of `bump-my-version` to use.                               | No       | `'latest'`            |
-| `label-major`                | The label used to trigger a major version bump.                        | No       | `'major'`             |
-| `label-minor`                | The label used to trigger a minor version bump.                        | No       | `'minor'`             |
-| `label-patch`                | The label used to trigger a patch version bump.                        | No       | `'patch'`             |
-| `branch-prefix`              | The prefix for the version bump branch name.                           | No       | `'workflow'`          |
-| `labels-to-add`              | Comma-separated string of labels to add to the PR for version bumping. | No       | `''`                  |
-| `create-release`             | Whether to create a GitHub Release for the new tag.                    | No       | `'false'`             |
+| Name                         | Description                                       | Required | Default               |
+|------------------------------|---------------------------------------------------|----------|-----------------------|
+| `github-token`               | The GitHub token for authentication.              | No       | `${{ github.token }}` |
+| `version-of-bump-my-version` | The version of `bump-my-version` to use.          | No       | `'latest'`            |
+| `label-major`                | The label used to trigger a major version bump.   | No       | `'major'`             |
+| `label-minor`                | The label used to trigger a minor version bump.   | No       | `'minor'`             |
+| `label-patch`                | The label used to trigger a patch version bump.   | No       | `'patch'`             |
+| `branch-prefix`              | The prefix for the version bump branch name.      | No       | `'workflow'`          |
+| `labels-to-add`              | Comma-separated labels to add to the bump PR.     | No       | `''`                  |
+| `create-release`             | Create a GitHub Release for the new tag.          | No       | `'false'`             |
 
+<!-- markdownlint-disable MD028 -->
 > [!TIP]
 > Set any of `label-major`, `label-minor`, or `label-patch` to an empty string (`''`) if you want to disable that bump type.
 
 > [!WARNING]
-> Any labels specified in `labels-to-add` must already exist in your repository. If they do not, create them in advance to avoid errors.
+> Any labels specified in `labels-to-add` must already exist in your repository.
+> If they do not, create them in advance to avoid errors.
+<!-- markdownlint-enable MD028 -->
 
 ### Outputs
 
@@ -190,11 +196,13 @@ Follow these steps to configure the permissions:
    - A Git tag (`vX.Y.Z`) is pushed to mark the new release.
 
 6. Optionally creates a GitHub Release
-   - If `create-release` is set to `true`, a GitHub Release is created for the new tag, with automatically generated release notes.
+   - If `create-release` is `true`, a GitHub Release is created for the new tag
+     with automatically generated release notes.
 
 ### Tag Management
 
-In addition to the full version tag (`vX.Y.Z`), this action updates existing major (`vX`) and minor (`vX.Y`) tags based on the following rules:
+In addition to the full version tag (`vX.Y.Z`), this action updates existing
+major (`vX`) and minor (`vX.Y`) tags based on the following rules:
 
 - If `vX.Y` exists → update to `vX.Y.Z`.
 - If `vX.Y` does not exist but a previous minor tag (`vX.Y` before the update) exists → create `vX.Y` and set it to `vX.Y.Z`.

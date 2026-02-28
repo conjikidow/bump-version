@@ -1,3 +1,4 @@
+---
 default_stages: [pre-commit]
 
 repos:
@@ -6,6 +7,28 @@ repos:
     hooks:
       - id: typos
         args: ["--force-exclude"]
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.21.0
+    hooks:
+      - id: markdownlint-cli2
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        args: ["--strict", "-c=.yamllint.yaml"]
+
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
+      - id: taplo-lint
+
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0

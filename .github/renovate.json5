@@ -1,25 +1,140 @@
 {
-  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: [
-    "config:recommended",
-    "helpers:pinGitHubActionDigests",
+    'config:recommended',
+    'helpers:pinGitHubActionDigests',
+  ],
+  customManagers: [
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.*\\.ya?ml$/',
+      ],
+      matchStrings: [
+        "uses: commitizen-tools/setup-cz@[a-f0-9]{40}[^\\n]*\\n(?:\\s+with:\\n(?:\\s+[^\\n]+\\n)*?)\\s+version: '(?<currentValue>[^'\\s]+)'",
+      ],
+      datasourceTemplate: 'pypi',
+      depNameTemplate: 'commitizen',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.*\\.ya?ml$/',
+      ],
+      matchStrings: [
+        "uses: zizmorcore/zizmor-action@[a-f0-9]{40}[^\\n]*\\n(?:\\s+with:\\n(?:\\s+[^\\n]+\\n)*?)\\s+version: '(?<currentValue>[^'\\s]+)'",
+      ],
+      datasourceTemplate: 'github-releases',
+      depNameTemplate: 'zizmorcore/zizmor',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.*\\.ya?ml$/',
+      ],
+      matchStrings: [
+        "uses: reviewdog/action-setup@[a-f0-9]{40}[^\\n]*\\n(?:\\s+with:\\n(?:\\s+[^\\n]+\\n)*?)\\s+reviewdog_version: '(?<currentValue>[^'\\s]+)'",
+      ],
+      datasourceTemplate: 'github-releases',
+      depNameTemplate: 'reviewdog/reviewdog',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.*\\.ya?ml$/',
+      ],
+      matchStrings: [
+        "uses: j178/prek-action@[a-f0-9]{40}[^\\n]*\\n(?:\\s+with:\\n(?:\\s+[^\\n]+\\n)*?)\\s+prek-version: '(?<currentValue>[^'\\s]+)'",
+      ],
+      datasourceTemplate: 'github-releases',
+      depNameTemplate: 'j178/prek',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/ci\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'go install github\\.com/rhysd/actionlint/cmd/actionlint@(?<currentValue>v\\S+)',
+      ],
+      datasourceTemplate: 'github-releases',
+      depNameTemplate: 'rhysd/actionlint',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/ci\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'npx --yes markdownlint-cli2@(?<currentValue>\\S+) \\.',
+      ],
+      datasourceTemplate: 'npm',
+      depNameTemplate: 'markdownlint-cli2',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/ci\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'uvx --from "yamllint==(?<currentValue>\\S+)" yamllint \\.',
+      ],
+      datasourceTemplate: 'pypi',
+      depNameTemplate: 'yamllint',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/ci\\.ya?ml$/',
+      ],
+      matchStrings: [
+        'cargo install taplo-cli@(?<currentValue>\\S+) --locked',
+      ],
+      datasourceTemplate: 'crate',
+      depNameTemplate: 'taplo-cli',
+    },
   ],
   packageRules: [
     {
-      matchCategories: ["ci"],
-      addLabels: ["ci"],
+      matchFileNames: [
+        '.github/workflows/**',
+      ],
+      addLabels: [
+        'ci',
+      ],
     },
     {
-      matchManagers: ["pre-commit"],
-      addLabels: ["pre-commit"],
+      matchManagers: [
+        'pre-commit',
+      ],
+      addLabels: [
+        'pre-commit',
+      ],
+    },
+    {
+      matchFileNames: [
+        '.github/workflows/**',
+      ],
+      matchUpdateTypes: [
+        'patch',
+      ],
+      automerge: true,
+    },
+    {
+      matchManagers: [
+        'pre-commit',
+      ],
+      matchUpdateTypes: [
+        'patch',
+      ],
       automerge: true,
     },
   ],
-  "pre-commit": {
+  'pre-commit': {
     enabled: true,
   },
   labels: [
-    "automated",
-    "dependencies",
+    'automated',
+    'dependencies',
   ],
 }

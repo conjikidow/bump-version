@@ -20,3 +20,4 @@ jobs:
           label-minor: 'update::minor'
           label-patch: 'update::patch'
           labels-to-add: 'automated,versioning'
+          create-release: 'true'
