@@ -16,9 +16,11 @@ jobs:
     name: Determine changed files
     runs-on: ubuntu-latest
     outputs:
-      src: ${{ steps.changed-files.outputs.src_any_changed }}
-      doc: ${{ steps.changed-files.outputs.doc_any_changed }}
       workflow: ${{ steps.changed-files.outputs.workflow_any_changed }}
+      workflow_ci: ${{ steps.changed-files.outputs.workflow_ci_any_changed }}
+      md: ${{ steps.changed-files.outputs.md_any_changed }}
+      yaml: ${{ steps.changed-files.outputs.yaml_any_changed }}
+      toml: ${{ steps.changed-files.outputs.toml_any_changed }}
 
     steps:
       - name: Checkout the main repository
@@ -28,17 +30,24 @@ jobs:
           persist-credentials: false
 
       - name: Determine changed files
-        uses: tj-actions/changed-files@7dee1b0c1557f278e5c7dc244927139d78c0e22a # v47.0.4
         id: changed-files
+        uses: tj-actions/changed-files@7dee1b0c1557f278e5c7dc244927139d78c0e22a # v47.0.4
         with:
           files_yaml: |
-            src:
-              - 'src/**.sh'
-            doc:
-              - '**/*.md'
-              - '**/docs/**'
             workflow:
               - .github/workflows/**
+            workflow_ci:
+              - .github/workflows/ci.yaml
+            md:
+              - '**/*.md'
+              - .markdownlint-cli2.yaml
+            yaml:
+              - '**/*.yml'
+              - '**/*.yaml'
+              - .yamllint.yaml
+            toml:
+              - '**/*.toml'
+              - .taplo.toml
 
   lint-gh-actions:
     name: Lint GitHub Actions
@@ -56,7 +65,15 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: reviewdog/action-actionlint@0d952c597ef8459f634d7145b0b044a9699e5e43 # v1.71.0
+      - name: Run actionlint
+        if: github.event_name != 'pull_request'
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.11
+          "$(go env GOPATH)/bin/actionlint" -color
+
+      - name: Run actionlint (reviewdog)
+        if: github.event_name == 'pull_request'
+        uses: reviewdog/action-actionlint@0d952c597ef8459f634d7145b0b044a9699e5e43 # v1.71.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
@@ -65,9 +82,113 @@ jobs:
       - name: Run zizmor
         uses: zizmorcore/zizmor-action@0dce2577a4760a2749d8cfb7a84b7d5585ebcb7d # v0.5.0
         with:
+          version: 'v1.22.0'
           inputs: |
             .github/workflows
             action.yaml
+
+  lint-markdown:
+    name: Lint Markdown
+    needs: determine-changes
+    if: ${{ needs.determine-changes.outputs.md == 'true' || needs.determine-changes.outputs.workflow_ci == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Lint Markdown
+        if: github.event_name != 'pull_request'
+        run: npx --yes markdownlint-cli2@0.21.0 .
+
+      - name: Set up reviewdog
+        if: github.event_name == 'pull_request'
+        uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
+        with:
+          reviewdog_version: 'v0.21.0'
+
+      - name: Lint Markdown (reviewdog)
+        if: github.event_name == 'pull_request'
+        run: |
+          markdownlint_rc=0
+          npx --yes markdownlint-cli2@0.21.0 . > /tmp/markdownlint-report.txt 2>&1 || markdownlint_rc=$?
+          reviewdog_rc=0
+          reviewdog < /tmp/markdownlint-report.txt \
+              -efm="%f:%l:%c %m" \
+              -efm="%f:%l %m" \
+              -name=markdownlint \
+              -reporter=github-pr-review \
+              -filter-mode=added \
+              -fail-level=error || reviewdog_rc=$?
+          if [ $markdownlint_rc -ne 0 ] && ! grep -Eq '^[^:]+:[0-9]+(:[0-9]+)? ' /tmp/markdownlint-report.txt; then
+            echo "::error title=markdownlint::markdownlint failed before producing parseable diagnostics"
+            exit $markdownlint_rc
+          fi
+          exit $reviewdog_rc
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint-yaml:
+    name: Lint YAML
+    needs: determine-changes
+    if: ${{ needs.determine-changes.outputs.yaml == 'true' || needs.determine-changes.outputs.workflow_ci == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        if: github.event_name != 'pull_request'
+        uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
+        with:
+          version: '0.10.6'
+
+      - name: Lint YAML
+        if: github.event_name != 'pull_request'
+        run: uvx --from "yamllint==1.38.0" yamllint .
+
+      - name: Lint YAML (reviewdog)
+        if: github.event_name == 'pull_request'
+        uses: reviewdog/action-yamllint@f01d8a48fd8d89f89895499fca2cff09f9e9e8c0 # v1.21.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: error
+          yamllint_flags: .
+
+  lint-toml:
+    name: Lint TOML
+    needs: determine-changes
+    if: ${{ needs.determine-changes.outputs.toml == 'true' || needs.determine-changes.outputs.workflow_ci == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the main repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install Taplo
+        run: cargo install taplo-cli@0.10.0 --locked
+
+      - name: Check TOML format
+        run: taplo fmt --check
+
+      - name: Lint TOML
+        run: taplo lint
 
   check-prek:
     name: Check prek
@@ -82,11 +203,16 @@ jobs:
       - name: Check prek
         uses: j178/prek-action@0bb87d7f00b0c99306c8bcb8b8beba1eb581c037 # v1.1.1
         with:
+          prek-version: 'v0.3.3'
           extra-args: '--all-files --skip no-commit-to-branch'
 
   check-typos:
     name: Check typos
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
 
     steps:
       - name: Checkout the main repository
@@ -95,11 +221,21 @@ jobs:
           persist-credentials: false
 
       - name: Check spelling
+        if: github.event_name != 'pull_request'
         uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d # v1.44.0
         with:
           files: |
             .
             .github/**
+
+      - name: Check spelling (reviewdog)
+        if: github.event_name == 'pull_request'
+        uses: reviewdog/action-typos@d5eb1bbcd1b3bfde596f6eeb470322727862fe98 # v1.19.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_level: error
+          typos_flags: --hidden .
 
   lint-commit-messages:
     name: Lint commit messages
@@ -116,6 +252,7 @@ jobs:
         uses: commitizen-tools/setup-cz@578def531656e522cd8978e6df62d626593e0a5f # v0.7.0
         with:
           python-version: '3.x'
+          version: '4.13.9'
 
       - name: Lint commit messages on push
         if: github.event_name == 'push'

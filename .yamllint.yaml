@@ -1,0 +1,19 @@
+---
+extends: default
+
+rules:
+  document-start:
+    present: true
+    ignore: |
+      .github/workflows/*.yml
+      .github/workflows/*.yaml
+  truthy:
+    ignore: |
+      .github/workflows/*.yml
+      .github/workflows/*.yaml
+  comments:
+    ignore: |
+      .github/workflows/*.yml
+      .github/workflows/*.yaml
+  line-length:
+    max: 120
