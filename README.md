@@ -51,7 +51,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Bump Version
-        uses: conjikidow/bump-version@v2.0.3
+        uses: conjikidow/bump-version@v2.0.4
         with:
           label-major: 'major update'
           label-minor: 'minor update'
@@ -83,7 +83,7 @@ jobs:
     steps:
       - name: Bump Version
         id: bump-version
-        uses: conjikidow/bump-version@v2.0.3
+        uses: conjikidow/bump-version@v2.0.4
 
       # This step is just a placeholder. You can replace it with your own script or external tools.
       - name: Create Release Notes
